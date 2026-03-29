@@ -1,0 +1,32 @@
+<div>POST to http://localhost:8080/api/v1/accounts</div>
+
+<h4>Body</h4>
+<div>
+    <pre class="preformated-text">
+{
+    &quot;accountNumber&quot;: &quot;ACC-3FB1090C&quot;,
+    &quot;accountHolderName&quot;: &quot;Mrs. Bennett Hickle&quot;,
+    &quot;balance&quot;: 50.0,
+    &quot;accountType&quot;: &quot;SAVINGS&quot;,
+    &quot;currency&quot;: &quot;NZD&quot;
+}    </pre>
+</div>
+
+<h4>Headers</h4>
+<div>
+        <div>Accept: application/json, application/javascript, text/javascript, text/json</div>
+        <div>Content-Type: application/json</div>
+</div>
+
+
+
+<h4>Curl</h4>
+<div>
+curl -v -X POST &#39;http://localhost:8080/api/v1/accounts&#39; -H &#39;Accept: application/json, application/javascript, text/javascript, text/json&#39; -H &#39;Content-Type: application/json&#39; -d &#39;{
+    &quot;accountNumber&quot;: &quot;ACC-3FB1090C&quot;,
+    &quot;accountHolderName&quot;: &quot;Mrs. Bennett Hickle&quot;,
+    &quot;balance&quot;: 50.0,
+    &quot;accountType&quot;: &quot;SAVINGS&quot;,
+    &quot;currency&quot;: &quot;NZD&quot;
+}&#39;
+</div>
