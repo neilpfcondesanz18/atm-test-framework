@@ -150,6 +150,12 @@
       <artifactId>awaitility</artifactId>
       <version>4.2.1</version>
     </dependency>
+      <!-- Cucumber PicoContainer for dependency injection between step defs -->
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-picocontainer</artifactId>
+      <version>${cucumber.version}</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -176,7 +182,13 @@
             <artifactId>aspectjweaver</artifactId>
             <version>${aspectj.version}</version>
           </dependency>
-        </dependencies>
+            <!-- Cucumber PicoContainer for dependency injection between step defs -->
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-picocontainer</artifactId>
+      <version>${cucumber.version}</version>
+    </dependency>
+  </dependencies>
       </plugin>
 
       <!-- Allure Maven Plugin -->
