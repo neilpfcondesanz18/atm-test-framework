@@ -1,0 +1,194 @@
+name: ATM Test Framework - CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        default: 'ci'
+        type: choice
+        options: [ci, staging]
+      tags:
+        description: 'Cucumber tags to run (e.g. @smoke)'
+        required: false
+        default: '@smoke'
+
+env:
+  JAVA_VERSION: '21'
+  TEST_ENV: ${{ github.event.inputs.environment || 'ci' }}
+  CUCUMBER_TAGS: ${{ github.event.inputs.tags || 'not @wip' }}
+
+jobs:
+  # ── Job 1: Start the system under test ──────────────────────────────
+  start-sut:
+    name: Start Banking Platform (SUT)
+    runs-on: ubuntu-latest
+    services:
+      banking-api:
+        image: ghcr.io/neilpfcondesanz18/atm-banking-platform:latest
+        ports:
+          - 8080:8080
+        options: >-
+          --health-cmd "wget -qO- http://localhost:8080/api/v1/accounts/health || exit 1"
+          --health-interval 15s
+          --health-timeout 10s
+          --health-retries 5
+    steps:
+      - name: Verify SUT is healthy
+        run: |
+          curl -f http://localhost:8080/api/v1/accounts/health
+          echo "✅ Banking API is up"
+
+  # ── Job 2: Run tests ─────────────────────────────────────────────────
+  test:
+    name: Run Automation Tests
+    runs-on: ubuntu-latest
+    needs: []   # Remove dependency on start-sut when using local H2 for CI
+    strategy:
+      matrix:
+        suite: [api, integration]
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: temurin
+          cache: maven
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
+      - name: Start Banking Platform (local for CI)
+        run: |
+          # Clone and start the platform locally for testing
+          git clone https://github.com/neilpfcondesanz18/atm-banking-platform.git /tmp/sut
+          cd /tmp/sut && mvn spring-boot:run -B &
+          echo "Waiting for API to start..."
+          timeout 60 bash -c 'until curl -sf http://localhost:8080/api/v1/accounts/health; do sleep 3; done'
+          echo "✅ SUT ready"
+
+      - name: Run ${{ matrix.suite }} tests
+        env:
+          API_BASE_URL: http://localhost:8080
+          TEST_ENV: ci
+        run: |
+          mvn test -B \
+            -Dtest.env=ci \
+            -Dcucumber.filter.tags="@${{ matrix.suite }}" \
+            -DargLine="-Dapi.base.url=http://localhost:8080"
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-${{ matrix.suite }}
+          path: target/allure-results/
+          retention-days: 30
+
+      - name: Upload Cucumber JSON
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-report-${{ matrix.suite }}
+          path: target/cucumber-reports/
+          retention-days: 30
+
+  # ── Job 3: Generate & publish Allure report ──────────────────────────
+  publish-report:
+    name: Publish Allure Report
+    runs-on: ubuntu-latest
+    needs: test
+    if: always()
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all Allure results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: allure-results-*
+          path: allure-results-combined
+          merge-multiple: true
+
+      - name: Get Allure history from gh-pages
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Copy history for trend charts
+        run: |
+          mkdir -p allure-results-combined/history
+          if [ -d gh-pages/allure-report/history ]; then
+            cp -r gh-pages/allure-report/history/* allure-results-combined/history/ || true
+          fi
+
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@master
+        with:
+          allure_results: allure-results-combined
+          allure_report: allure-report
+          allure_history: allure-history
+
+      - name: Add run metadata to report
+        run: |
+          cat > allure-report/environment.properties <<EOF
+          Branch=${{ github.ref_name }}
+          Commit=${{ github.sha }}
+          RunID=${{ github.run_id }}
+          Triggered.By=${{ github.actor }}
+          API.URL=http://localhost:8080
+          EOF
+
+      # ── Option A: Publish to GitHub Pages ───────────────────────────
+      - name: Deploy Allure report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-report
+          destination_dir: allure-report
+          keep_files: true
+
+      - name: Post report URL to job summary
+        run: |
+          echo "## 📊 Test Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 **Allure Report (GitHub Pages):** https://neilpfcondesanz18.github.io/atm-test-framework/allure-report/" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Suite | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| API   | ✅     |" >> $GITHUB_STEP_SUMMARY
+          echo "| Integration | ✅ |" >> $GITHUB_STEP_SUMMARY
+
+      # ── Option B: Publish to AWS S3 (uncomment to enable) ───────────
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ap-southeast-2   # Sydney — closest to NZ
+      #
+      # - name: Upload Allure report to S3
+      #   run: |
+      #     aws s3 sync allure-report/ s3://${{ secrets.S3_BUCKET }}/reports/${{ github.run_id }}/ \
+      #       --delete --cache-control "no-cache"
+      #     aws s3 sync allure-report/ s3://${{ secrets.S3_BUCKET }}/reports/latest/ \
+      #       --delete --cache-control "no-cache"
+      #     echo "S3 Report URL: https://${{ secrets.S3_BUCKET }}.s3.ap-southeast-2.amazonaws.com/reports/latest/index.html"
