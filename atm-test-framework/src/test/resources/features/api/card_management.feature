@@ -9,20 +9,26 @@ Feature: Card Management API
 
   @smoke @card-issue
   Scenario: Issue a debit card for an active account
-    When I issue a "DEBIT" card for account "ACC-001"
+    Given I have a valid account payload
+    When I create the account
+    And I issue a "DEBIT" card for the created account
     Then the response status should be 201
     And the card should be issued successfully
     And the issued card number should not be null
 
   @card-issue @regression
   Scenario: Issue a credit card for an active account
-    When I issue a "CREDIT" card for account "ACC-002"
+    Given I have a valid account payload
+    When I create the account
+    And I issue a "CREDIT" card for the created account
     Then the response status should be 201
     And the card should be issued successfully
 
   @card-block @regression
   Scenario: Block a newly issued card
-    When I issue a "DEBIT" card for account "ACC-001"
+    Given I have a valid account payload
+    When I create the account
+    And I issue a "DEBIT" card for the created account
     Then the response status should be 201
     When I block the last issued card
     Then the response status should be 200
@@ -30,7 +36,9 @@ Feature: Card Management API
 
   @card-block @regression
   Scenario: Unblock a blocked card
-    When I issue a "DEBIT" card for account "ACC-001"
+    Given I have a valid account payload
+    When I create the account
+    And I issue a "DEBIT" card for the created account
     Then the response status should be 201
     When I block the last issued card
     Then the response status should be 200
@@ -40,7 +48,9 @@ Feature: Card Management API
 
   @pin @regression
   Scenario: Validate a correct PIN returns true
-    When I issue a "DEBIT" card for account "ACC-001"
+    Given I have a valid account payload
+    When I create the account
+    And I issue a "DEBIT" card for the created account
     Then the response status should be 201
     When I validate PIN "1234" for the last issued card
     Then the response status should be 200
@@ -48,7 +58,9 @@ Feature: Card Management API
 
   @pin @negative
   Scenario: Validate an incorrect PIN format returns false
-    When I issue a "DEBIT" card for account "ACC-001"
+    Given I have a valid account payload
+    When I create the account
+    And I issue a "DEBIT" card for the created account
     Then the response status should be 201
     When I validate PIN "ab" for the last issued card
     Then the response status should be 200
