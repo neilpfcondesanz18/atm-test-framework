@@ -1,1 +1,1 @@
-{"total":0,"items":[]}
+{"total":3,"items":[{"uid":"428ea52323fc9d89e879efa31d721b56","name":"Card Management API","statistic":{"failed":0,"broken":4,"skipped":0,"passed":2,"unknown":0,"total":6}},{"uid":"762d2640dc99c651d51ec7a145cd963d","name":"Account Management API","statistic":{"failed":0,"broken":0,"skipped":0,"passed":9,"unknown":0,"total":9}},{"uid":"cb9962423f06c9f1151de6b07c7a6390","name":"End-to-End ATM Transaction Flows","statistic":{"failed":0,"broken":0,"skipped":0,"passed":3,"unknown":0,"total":3}}]}
