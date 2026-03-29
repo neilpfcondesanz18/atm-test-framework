@@ -16,7 +16,9 @@ public class AccountStepDefs {
 
     private Response response;
     private Map<String, Object> accountPayload = new HashMap<>();
+    private Map<String, Object> secondAccountPayload = new HashMap<>();
     private String currentAccountNumber;
+    private String secondAccountNumber;
 
     @Given("the banking API is available")
     @Step("Verify banking API health")
@@ -42,6 +44,16 @@ public class AccountStepDefs {
     @Step("POST /api/v1/accounts")
     public void iCreateTheAccount() {
         response = ApiClient.createAccount(accountPayload);
+        if (response.statusCode() == 201) {
+            currentAccountNumber = response.jsonPath().getString("accountNumber");
+        }
+    }
+
+    @When("I create a second account with balance {double}")
+    public void iCreateASecondAccountWithBalance(double balance) {
+        secondAccountPayload = TestDataFactory.accountWithBalance(balance);
+        Response r = ApiClient.createAccount(secondAccountPayload);
+        secondAccountNumber = r.jsonPath().getString("accountNumber");
     }
 
     @When("I retrieve account {string}")
@@ -49,10 +61,20 @@ public class AccountStepDefs {
         response = ApiClient.getAccount(accountNumber);
     }
 
+    @When("I withdraw {double} from the created account at ATM {string}")
+    @Step("Withdraw {amount} from created account")
+    public void iWithdrawFromCreatedAccount(double amount, String atmId) {
+        response = ApiClient.withdraw(currentAccountNumber, amount, atmId);
+    }
+
     @When("I withdraw {double} from account {string} at ATM {string}")
-    @Step("Withdraw {amount} from {accountNumber}")
-    public void iWithdraw(double amount, String accountNumber, String atmId) {
+    public void iWithdrawFromAccount(double amount, String accountNumber, String atmId) {
         response = ApiClient.withdraw(accountNumber, amount, atmId);
+    }
+
+    @When("I deposit {double} into the created account")
+    public void iDepositIntoCreatedAccount(double amount) {
+        response = ApiClient.deposit(currentAccountNumber, amount, "ATM");
     }
 
     @When("I deposit {double} into account {string}")
@@ -60,9 +82,19 @@ public class AccountStepDefs {
         response = ApiClient.deposit(accountNumber, amount, "ATM");
     }
 
+    @When("I transfer {double} from the first account to the second account")
+    public void iTransferBetweenCreatedAccounts(double amount) {
+        response = ApiClient.transfer(currentAccountNumber, secondAccountNumber, amount);
+    }
+
     @When("I transfer {double} from {string} to {string}")
     public void iTransfer(double amount, String from, String to) {
         response = ApiClient.transfer(from, to, amount);
+    }
+
+    @When("I freeze the created account")
+    public void iFreezeCreatedAccount() {
+        response = ApiClient.freezeAccount(currentAccountNumber);
     }
 
     @When("I freeze account {string}")
@@ -79,14 +111,15 @@ public class AccountStepDefs {
     public void theAccountShouldBeCreatedSuccessfully() {
         response.then()
                 .statusCode(201)
-                .body("accountNumber", equalTo(currentAccountNumber))
+                .body("accountNumber", notNullValue())
                 .body("status", equalTo("ACTIVE"))
                 .body("balance", notNullValue());
     }
 
     @Then("the balance after should be {double}")
     public void theBalanceAfterShouldBe(double expected) {
-        response.then().body("balanceAfter", equalTo((float) expected));
+        double actual = response.jsonPath().getDouble("balanceAfter");
+        Assertions.assertThat(actual).isEqualTo(expected);
     }
 
     @Then("the transaction type should be {string}")
