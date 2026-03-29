@@ -132,3 +132,4 @@ The GitHub Actions workflow (`.github/workflows/test-ci.yml`):
 6. **Posts report URL** to the GitHub Actions job summary
 
 You can also trigger manually with custom tags from the GitHub Actions UI.
+# trigger ci
