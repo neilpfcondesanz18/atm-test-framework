@@ -15,6 +15,15 @@ public class CardStepDefs {
         this.ctx = ctx;
     }
 
+    @When("I issue a {string} card for the created account")
+    public void iIssueACardForTheCreatedAccount(String cardType) {
+        assertThat(ctx.currentAccountNumber).isNotNull();
+        ctx.lastResponse = ApiClient.issueCard(ctx.currentAccountNumber, cardType);
+        if (ctx.lastResponse.statusCode() == 201) {
+            ctx.lastIssuedCardNumber = ctx.lastResponse.jsonPath().getString("cardNumber");
+        }
+    }
+
     @When("I issue a {string} card for account {string}")
     public void iIssueACardForAccount(String cardType, String accountNumber) {
         ctx.lastResponse = ApiClient.issueCard(accountNumber, cardType);
@@ -25,25 +34,19 @@ public class CardStepDefs {
 
     @When("I block the last issued card")
     public void iBlockTheLastIssuedCard() {
-        assertThat(ctx.lastIssuedCardNumber)
-                .as("No card has been issued yet in this scenario")
-                .isNotNull();
+        assertThat(ctx.lastIssuedCardNumber).isNotNull();
         ctx.lastResponse = ApiClient.blockCard(ctx.lastIssuedCardNumber);
     }
 
     @When("I unblock the last issued card")
     public void iUnblockTheLastIssuedCard() {
-        assertThat(ctx.lastIssuedCardNumber)
-                .as("No card has been issued yet in this scenario")
-                .isNotNull();
+        assertThat(ctx.lastIssuedCardNumber).isNotNull();
         ctx.lastResponse = ApiClient.unblockCard(ctx.lastIssuedCardNumber);
     }
 
     @When("I validate PIN {string} for the last issued card")
     public void iValidatePinForTheLastIssuedCard(String pin) {
-        assertThat(ctx.lastIssuedCardNumber)
-                .as("No card has been issued yet in this scenario")
-                .isNotNull();
+        assertThat(ctx.lastIssuedCardNumber).isNotNull();
         ctx.lastResponse = ApiClient.validatePin(ctx.lastIssuedCardNumber, pin);
     }
 
