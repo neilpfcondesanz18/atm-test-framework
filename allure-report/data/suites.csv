@@ -1,52 +1,52 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
 "  As a banking system
-  I want to manage accounts via API
-  So that customers can perform banking operations","493","Withdrawal with insufficient funds returns 422","","Sun Apr 05 11:01:05 UTC 2026","passed","Sun Apr 05 11:01:06 UTC 2026","","Account Management API","Withdrawal with insufficient funds returns 422",""
+  I want to manage debit and credit cards
+  So that customers can use ATMs and make payments","499","Issue a credit card for an active account","","Sun Apr 05 11:07:18 UTC 2026","passed","Sun Apr 05 11:07:18 UTC 2026","","Card Management API","Issue a credit card for an active account",""
 "  As a banking system
   I want to manage debit and credit cards
-  So that customers can use ATMs and make payments","546","Issue a debit card for an active account","","Sun Apr 05 11:01:05 UTC 2026","passed","Sun Apr 05 11:01:06 UTC 2026","","Card Management API","Issue a debit card for an active account",""
+  So that customers can use ATMs and make payments","371","Validate an incorrect PIN format returns false","","Sun Apr 05 11:07:18 UTC 2026","passed","Sun Apr 05 11:07:18 UTC 2026","","Card Management API","Validate an incorrect PIN format returns false",""
+"  As a banking system
+  I want to manage debit and credit cards
+  So that customers can use ATMs and make payments","629","Issue a debit card for an active account","","Sun Apr 05 11:07:17 UTC 2026","passed","Sun Apr 05 11:07:18 UTC 2026","","Card Management API","Issue a debit card for an active account",""
 "  As a banking system
   I want to manage accounts via API
-  So that customers can perform banking operations","205","Retrieve non-existent account returns 404","","Sun Apr 05 11:01:05 UTC 2026","passed","Sun Apr 05 11:01:05 UTC 2026","","Account Management API","Retrieve non-existent account returns 404",""
+  So that customers can perform banking operations","403","Create account with high balance","","Sun Apr 05 11:07:17 UTC 2026","passed","Sun Apr 05 11:07:18 UTC 2026","","Account Management API","Create account with high balance",""
+"  As a banking system
+  I want to manage accounts via API
+  So that customers can perform banking operations","254","Retrieve non-existent account returns 404","","Sun Apr 05 11:07:17 UTC 2026","passed","Sun Apr 05 11:07:18 UTC 2026","","Account Management API","Retrieve non-existent account returns 404",""
 "  As a bank customer
   I want to perform complete ATM operations
-  So that I can manage my finances end-to-end","4045","Card block prevents ATM operations - card re-enable flow","","Sun Apr 05 11:01:01 UTC 2026","passed","Sun Apr 05 11:01:05 UTC 2026","","End-to-End ATM Transaction Flows","Card block prevents ATM operations - card re-enable flow",""
+  So that I can manage my finances end-to-end","4155","Complete ATM cash withdrawal flow","","Sun Apr 05 11:07:09 UTC 2026","passed","Sun Apr 05 11:07:13 UTC 2026","","End-to-End ATM Transaction Flows","Complete ATM cash withdrawal flow",""
+"  As a banking system
+  I want to manage debit and credit cards
+  So that customers can use ATMs and make payments","136","Issue card for non-existent account returns 404","","Sun Apr 05 11:07:18 UTC 2026","passed","Sun Apr 05 11:07:18 UTC 2026","","Card Management API","Issue card for non-existent account returns 404",""
 "  As a banking system
   I want to manage accounts via API
-  So that customers can perform banking operations","472","Create account with high balance","","Sun Apr 05 11:01:05 UTC 2026","passed","Sun Apr 05 11:01:06 UTC 2026","","Account Management API","Create account with high balance",""
-"  As a banking system
-  I want to manage debit and credit cards
-  So that customers can use ATMs and make payments","492","Issue a credit card for an active account","","Sun Apr 05 11:01:05 UTC 2026","passed","Sun Apr 05 11:01:06 UTC 2026","","Card Management API","Issue a credit card for an active account",""
-"  As a banking system
-  I want to manage debit and credit cards
-  So that customers can use ATMs and make payments","371","Validate a correct PIN returns true","","Sun Apr 05 11:01:05 UTC 2026","passed","Sun Apr 05 11:01:06 UTC 2026","","Card Management API","Validate a correct PIN returns true",""
+  So that customers can perform banking operations","564","Transfer funds between two accounts","","Sun Apr 05 11:07:17 UTC 2026","passed","Sun Apr 05 11:07:18 UTC 2026","","Account Management API","Transfer funds between two accounts",""
 "  As a bank customer
   I want to perform complete ATM operations
-  So that I can manage my finances end-to-end","4209","Complete ATM cash withdrawal flow","","Sun Apr 05 11:01:01 UTC 2026","passed","Sun Apr 05 11:01:05 UTC 2026","","End-to-End ATM Transaction Flows","Complete ATM cash withdrawal flow",""
+  So that I can manage my finances end-to-end","4051","Card block prevents ATM operations - card re-enable flow","","Sun Apr 05 11:07:09 UTC 2026","passed","Sun Apr 05 11:07:13 UTC 2026","","End-to-End ATM Transaction Flows","Card block prevents ATM operations - card re-enable flow",""
 "  As a banking system
   I want to manage accounts via API
-  So that customers can perform banking operations","505","Freeze a newly created account","","Sun Apr 05 11:01:05 UTC 2026","passed","Sun Apr 05 11:01:06 UTC 2026","","Account Management API","Freeze a newly created account",""
-"  As a banking system
-  I want to manage accounts via API
-  So that customers can perform banking operations","559","Successful ATM withdrawal reduces balance correctly","","Sun Apr 05 11:01:05 UTC 2026","passed","Sun Apr 05 11:01:06 UTC 2026","","Account Management API","Successful ATM withdrawal reduces balance correctly",""
+  So that customers can perform banking operations","450","Freeze a newly created account","","Sun Apr 05 11:07:17 UTC 2026","passed","Sun Apr 05 11:07:18 UTC 2026","","Account Management API","Freeze a newly created account",""
 "  As a banking system
   I want to manage debit and credit cards
-  So that customers can use ATMs and make payments","334","Validate an incorrect PIN format returns false","","Sun Apr 05 11:01:06 UTC 2026","passed","Sun Apr 05 11:01:06 UTC 2026","","Card Management API","Validate an incorrect PIN format returns false",""
+  So that customers can use ATMs and make payments","406","Validate a correct PIN returns true","","Sun Apr 05 11:07:18 UTC 2026","passed","Sun Apr 05 11:07:18 UTC 2026","","Card Management API","Validate a correct PIN returns true",""
+"  As a banking system
+  I want to manage accounts via API
+  So that customers can perform banking operations","431","Withdrawal with insufficient funds returns 422","","Sun Apr 05 11:07:17 UTC 2026","passed","Sun Apr 05 11:07:18 UTC 2026","","Account Management API","Withdrawal with insufficient funds returns 422",""
+"  As a banking system
+  I want to manage accounts via API
+  So that customers can perform banking operations","500","Withdrawal from frozen account returns 422","","Sun Apr 05 11:07:17 UTC 2026","passed","Sun Apr 05 11:07:18 UTC 2026","","Account Management API","Withdrawal from frozen account returns 422",""
 "  As a bank customer
   I want to perform complete ATM operations
-  So that I can manage my finances end-to-end","4066","Transfer then verify transaction history","","Sun Apr 05 11:01:01 UTC 2026","passed","Sun Apr 05 11:01:05 UTC 2026","","End-to-End ATM Transaction Flows","Transfer then verify transaction history",""
+  So that I can manage my finances end-to-end","3999","Transfer then verify transaction history","","Sun Apr 05 11:07:09 UTC 2026","passed","Sun Apr 05 11:07:13 UTC 2026","","End-to-End ATM Transaction Flows","Transfer then verify transaction history",""
 "  As a banking system
   I want to manage accounts via API
-  So that customers can perform banking operations","545","Successfully create a new account","","Sun Apr 05 11:01:05 UTC 2026","passed","Sun Apr 05 11:01:06 UTC 2026","","Account Management API","Successfully create a new account",""
+  So that customers can perform banking operations","577","Successful ATM withdrawal reduces balance correctly","","Sun Apr 05 11:07:17 UTC 2026","passed","Sun Apr 05 11:07:18 UTC 2026","","Account Management API","Successful ATM withdrawal reduces balance correctly",""
 "  As a banking system
   I want to manage accounts via API
-  So that customers can perform banking operations","653","Transfer funds between two accounts","","Sun Apr 05 11:01:05 UTC 2026","passed","Sun Apr 05 11:01:06 UTC 2026","","Account Management API","Transfer funds between two accounts",""
-"  As a banking system
-  I want to manage debit and credit cards
-  So that customers can use ATMs and make payments","114","Issue card for non-existent account returns 404","","Sun Apr 05 11:01:06 UTC 2026","passed","Sun Apr 05 11:01:06 UTC 2026","","Card Management API","Issue card for non-existent account returns 404",""
+  So that customers can perform banking operations","507","Deposit increases account balance","","Sun Apr 05 11:07:17 UTC 2026","passed","Sun Apr 05 11:07:18 UTC 2026","","Account Management API","Deposit increases account balance",""
 "  As a banking system
   I want to manage accounts via API
-  So that customers can perform banking operations","583","Withdrawal from frozen account returns 422","","Sun Apr 05 11:01:05 UTC 2026","passed","Sun Apr 05 11:01:06 UTC 2026","","Account Management API","Withdrawal from frozen account returns 422",""
-"  As a banking system
-  I want to manage accounts via API
-  So that customers can perform banking operations","411","Deposit increases account balance","","Sun Apr 05 11:01:05 UTC 2026","passed","Sun Apr 05 11:01:05 UTC 2026","","Account Management API","Deposit increases account balance",""
+  So that customers can perform banking operations","482","Successfully create a new account","","Sun Apr 05 11:07:17 UTC 2026","passed","Sun Apr 05 11:07:18 UTC 2026","","Account Management API","Successfully create a new account",""
