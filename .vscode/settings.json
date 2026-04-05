@@ -1,0 +1,45 @@
+{
+  "java.format.enabled": true,
+  "java.saveActions.organizeImports": true,
+  "java.checkstyle.configuration": "${workspaceFolder}/checkstyle.xml",
+  "java.checkstyle.version": "10.12.4",
+  "java.completion.importOrder": ["java", "javax", "io", "org", "com", ""],
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.fixAll": "explicit"
+  },
+  "editor.rulers": [120],
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "editor.trimAutoWhitespace": true,
+  "editor.renderWhitespace": "boundary",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.associations": {
+    "*.feature": "cucumber"
+  },
+  "files.exclude": {
+    "**/target": true,
+    "**/allure-results": true,
+    "**/allure-report": true,
+    "**/.classpath": true,
+    "**/.project": true,
+    "**/.settings": true,
+    "**/.factorypath": true
+  },
+  "cucumber.features": [
+    "src/test/resources/features/**/*.feature"
+  ],
+  "cucumber.glue": [
+    "src/test/java/com/atm/**/*.java"
+  ],
+  "sonarlint.rules": {
+    "java:S1192": { "level": "on" },
+    "java:S1481": { "level": "on" },
+    "java:S3776": { "level": "on" },
+    "java:S2699": { "level": "on" }
+  },
+  "git.autofetch": true
+}

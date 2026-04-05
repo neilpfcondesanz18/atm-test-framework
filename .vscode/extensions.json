@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "vscjava.vscode-java-pack",
+    "alexkrechik.cucumberautocomplete",
+    "shengchen.vscode-checkstyle",
+    "sonarsource.sonarlint-vscode",
+    "editorconfig.editorconfig",
+    "humao.rest-client",
+    "eamodio.gitlens",
+    "redhat.vscode-yaml",
+    "streetsidesoftware.code-spell-checker"
+  ]
+}

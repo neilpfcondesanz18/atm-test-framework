@@ -1,0 +1,37 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "🧪 Run All Tests",
+      "request": "launch",
+      "mainClass": "com.atm.runners.TestRunner",
+      "projectName": "atm-test-framework",
+      "vmArgs": "-Dtest.env=local -Dapi.base.url=http://localhost:8080"
+    },
+    {
+      "type": "java",
+      "name": "🔥 Run Smoke Tests",
+      "request": "launch",
+      "mainClass": "com.atm.runners.TestRunner",
+      "projectName": "atm-test-framework",
+      "vmArgs": "-Dtest.env=local -Dapi.base.url=http://localhost:8080 -Dcucumber.filter.tags=@smoke"
+    },
+    {
+      "type": "java",
+      "name": "🃏 Run Card Tests",
+      "request": "launch",
+      "mainClass": "com.atm.runners.ApiTestRunner",
+      "projectName": "atm-test-framework",
+      "vmArgs": "-Dtest.env=local -Dapi.base.url=http://localhost:8080 -Dcucumber.filter.tags=@cards"
+    },
+    {
+      "type": "java",
+      "name": "🏧 Run ATM Tests",
+      "request": "launch",
+      "mainClass": "com.atm.runners.ApiTestRunner",
+      "projectName": "atm-test-framework",
+      "vmArgs": "-Dtest.env=local -Dapi.base.url=http://localhost:8080 -Dcucumber.filter.tags=@atm"
+    }
+  ]
+}
