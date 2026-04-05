@@ -14,7 +14,7 @@ on:
         type: choice
         options: [ci, staging]
       tags:
-        description: 'Cucumber tags to run (e.g. @smoke)'
+        description: 'Cucumber tags to run'
         required: false
         default: 'not @wip'
 
@@ -23,7 +23,6 @@ env:
   TEST_ENV: ${{ github.event.inputs.environment || 'ci' }}
 
 jobs:
-  # ── Job 1: Build SUT + run tests ─────────────────────────────────────
   test:
     name: Run Automation Tests (${{ matrix.suite }})
     runs-on: ubuntu-latest
@@ -48,7 +47,6 @@ jobs:
         with:
           chrome-version: stable
 
-      # Uses PAT_TOKEN secret to access the private atm-banking-platform repo
       - name: Checkout banking platform (SUT)
         uses: actions/checkout@v4
         with:
@@ -93,7 +91,6 @@ jobs:
           path: target/cucumber-reports/
           retention-days: 30
 
-  # ── Job 2: Generate & publish Allure report ──────────────────────────
   publish-report:
     name: Publish Allure Report
     runs-on: ubuntu-latest
@@ -129,24 +126,22 @@ jobs:
             cp -r gh-pages/allure-report/history/* allure-results-combined/history/ || true
           fi
 
-      - name: Generate Allure Report
-        uses: simple-elf/allure-report-action@master
-        with:
-          allure_results: allure-results-combined
-          allure_report: allure-report
-          allure_history: allure-history
-
-      - name: Add run metadata to report
+      - name: Write environment info into results
         run: |
-          chmod -R u+w allure-report || true
-          cat >> allure-report/environment.properties <<ENVEOF
+          cat > allure-results-combined/environment.properties << ENVEOF
           Branch=${{ github.ref_name }}
           Commit=${{ github.sha }}
           RunID=${{ github.run_id }}
           Triggered.By=${{ github.actor }}
           API.URL=http://localhost:8080
           ENVEOF
-        continue-on-error: true
+
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@master
+        with:
+          allure_results: allure-results-combined
+          allure_report: allure-report
+          allure_history: allure-history
 
       - name: Deploy Allure report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -160,5 +155,4 @@ jobs:
       - name: Post report URL to job summary
         run: |
           echo "## 📊 Test Report" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
           echo "🔗 **Allure Report:** https://neilpfcondesanz18.github.io/atm-test-framework/allure-report/" >> $GITHUB_STEP_SUMMARY
